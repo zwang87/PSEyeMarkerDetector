@@ -1,0 +1,16 @@
+IMPORTANT INFORMATION
+====================
+
+*DO NOT* compile DSVL and your application with DIFFERENT C/C++ runtime
+libraries (e.g. "Multithreaded" and "Multithreaded DLL"), as this would
+result in memory corruption and "crtIsValidHeapPointer" exceptions.
+
+Make sure you have Microsoft's DirectX 9.0 SDK (April 2005) and
+Extras Package (February 2005) installed. The $(DXSDK_DIR)
+environment variable should point to your SDK root directory.
+Put the Extras package into $(DXSDK_DIR)\Extras.
+
+DSVL links against strmbase.lib (Release) and strmbasd.lib (Debug) which
+DO NOT come with the SDK in binary form. Use the following workspace
+to build those libraries:
+$(DXSDK_DIR)\Extras\DirectShow\Samples\C++\DirectShow\BaseClasses\baseclasses.sln
