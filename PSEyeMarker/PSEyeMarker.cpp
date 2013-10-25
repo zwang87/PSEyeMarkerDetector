@@ -12,7 +12,7 @@ _cameraGUID(cameraGUID), _cam(NULL), _mode(mode), _resolution(resolution), _fps(
 bool CLEyeCameraCapture::StartCapture()
 {
 	_running = true;
-	namedWindow(_windowName, 0);
+	namedWindow(_windowName, 1);
 	// Start CLEye image capture thread
 	_hThread = CreateThread(NULL, 0, &CLEyeCameraCapture::CaptureThread, this, 0, 0);
 	if(_hThread == NULL)
@@ -54,6 +54,7 @@ void CLEyeCameraCapture::Run()
 	else
 		pCapImage = cvCreateImage(cvSize(w, h), IPL_DEPTH_8U, 1);
 
+	//cout << "w:" << w << "h:" << h << endl;
 	// Set some camera parameters
 	//CLEyeSetCameraParameter(_cam, CLEYE_GAIN, 20);
 	//CLEyeSetCameraParameter(_cam, CLEYE_EXPOSURE, 511);
@@ -81,7 +82,7 @@ void CLEyeCameraCapture::Run()
 	char* fpsText = new char[5];
 	char* pos_text = new char[10];
 	//initialize marker detector
-	markerDetector->Init();
+	markerDetector->Init(w, h);
 
 	while(_running)
 	{
@@ -99,6 +100,7 @@ void CLEyeCameraCapture::Run()
 
 		//points of marker rectangle contour
 		Point2f markerPoints[4];
+		//cout << "w:" << pCapture.cols << "h:" << pCapture.rows << endl;
 		markerDetector->MainLoop(pCapture, markerPoints);
 		//draw 4 edges of the rectangle of marker 
 		for(int i = 0; i < 3; i++)
@@ -179,7 +181,7 @@ int main(int argc, char** argv)
 			guid.Data4[6], guid.Data4[7]);
 		sprintf(windowName, "Camera Window %d", i+1);
 		// Create camera capture object
-		cam[i] = new CLEyeCameraCapture(windowName, guid,  CLEYE_COLOR_PROCESSED, CLEYE_VGA, 60);
+		cam[i] = new CLEyeCameraCapture(windowName, guid,  CLEYE_COLOR_PROCESSED, CLEYE_VGA, 100);
 		cout << "Starting capture on camera " << i+1 << endl;
 		cam[i]->StartCapture();
 	}

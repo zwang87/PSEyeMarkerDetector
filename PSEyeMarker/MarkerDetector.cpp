@@ -13,7 +13,7 @@ MarkerDetector::MarkerDetector()
 	memset(patt_center, 0.0, sizeof(patt_center));
 }
 
-void MarkerDetector::Init()
+void MarkerDetector::Init(int width, int height)
 {
 	
 	cout << "Init() run!!!!!!!!!!!!!!!!!!!!" << endl;
@@ -24,10 +24,12 @@ void MarkerDetector::Init()
 	}
 	else
 		cout << "pattern loaded!!!!" << endl;
-	if (arParamLoad(cparam_name, 1, &wparam) < 0) {
+	if (arParamLoad(cparam_name, 1, &cparam) < 0) {
 		cout << "Camera calibration parameters file load error" << endl;
 		exit(-1);
 	}
+	arParamChangeSize(&cparam, width, height, &wparam);
+
 	arInitCparam(&wparam);
 }
 
@@ -37,10 +39,10 @@ bool MarkerDetector::MainLoop(const cv::Mat& img, Point2f markerPoints[4])
 {
 	int j, k;
 	count ++;
-	arParamChangeSize(&wparam, img.rows, img.cols, &wparam);
+	//arParamChangeSize(&wparam, img.rows, img.cols, &cparam);
 	ARMarkerInfo *markerInfo = NULL;
 	int marker_num = -1;
-	if(arDetectMarker((ARUint8*)img.data, 150, &markerInfo, &marker_num)<0)
+	if(arDetectMarker((ARUint8*)img.data, 50, &markerInfo, &marker_num)<0)
 	{
 		return false;
 	}

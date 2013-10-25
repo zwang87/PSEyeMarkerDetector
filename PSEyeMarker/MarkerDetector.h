@@ -44,7 +44,7 @@ class MarkerDetector
 
 public:
 	MarkerDetector();
-	void Init();
+	void Init(int width, int height);
 	void Cleanup();
 	//void keyEvent(unsigned char key, int x, int y);
 	bool MainLoop(const cv::Mat& img, Point2f markerPoints[4]);
